@@ -1,0 +1,242 @@
+
+label{
+    font-family: Helvetica, Arial;
+    font-size: 12px;
+    color: black;
+}
+
+#pokedex-container{    
+    border-radius: 10px;
+    background-color: #333;        
+    width: 90%;
+    margin: auto;
+    padding: 3% 2.5% 3% 2.5%;
+}
+
+#pokedex-container-info{
+    border-radius: 10px;
+    background-color: #333;        
+    width: 90%;
+    margin: auto;
+    padding: 0.5% 2.5% 3% 2.5%;
+    margin-top: 3%;
+}
+
+#pokedex-form{
+    padding: 2%;
+    background-color: #ff6b6b;
+    border-radius: 10px;    
+}
+
+#pokemon-info{    
+    margin-top:2%;
+    border-radius: 10px;
+    background-color: #ff6b6b;
+    padding: 1px 20px 20px 20px;
+    display: none;
+}
+
+.title-welcome{
+    font-family: Helvetica, Arial;
+    color: white;
+    font-size: 3vw;
+}
+
+#p_loading{
+    margin: 0 auto;
+    font-family: Helvetica, Arial;
+    color: white;
+    font-size: 3vw;
+}
+
+.title-pokeinfo{
+    font-family: Helvetica, Arial;
+    color: white;
+    font-size: 2vw;
+}
+
+#title-pokeinfo-pokemon{
+    font-family: Helvetica, Arial;
+    color: white;
+    font-size: 3vw;
+}
+
+
+.title{    
+    font-family: Helvetica, Arial;
+    color: #333;
+    font-size: 14px;
+}
+
+.responsive-img-center{
+    margin-left: auto;
+    margin-right: auto;
+    width: 10%;
+}
+
+.responsive-img-gif{
+    margin-left: auto;
+    margin-right: auto;
+    width: 20%;
+}
+
+#querys-name-type{    
+    background-color: #535c68;
+    padding:5px;
+    text-align: justify;    
+    margin: auto;
+    border-radius: 10px;
+}
+
+#querys-desc-pokemon{
+    background-color: #535c68;
+    padding:10px;
+    text-align: center;
+}
+
+#querys-moves{
+    border-radius: 10px;
+    background-color: #535c68;
+    padding:1%;
+}
+
+#pokemon-img{
+    padding: 1%;
+    display: block;
+    float: right;
+    width: 30%;
+    margin-top: -30%;
+}
+
+#poke-gif{
+    margin-left: auto;
+    margin-right: auto;
+    width: 20%;
+}
+
+#desc_img{
+    float:left;
+}
+
+.responsive-img{
+    margin-left: auto;
+    margin-right: auto;
+    width: 80%;
+}
+
+#pokemon-title{
+    font-family: Helvetica, Arial;
+    color:white;
+    font-size: 2.5vw;
+    width: 100%;
+    border-radius: 10px;    
+}
+
+.p_info{
+    color: #ccc;
+    background-color: #2f3542;
+    border-radius: 25px;
+    text-align: center;
+    font-size: 2vw;
+    padding: 1%;
+    margin: 1% 1% 1% 1%;
+    transition: 0.3s;
+}
+
+#p_indices{
+    color: #ccc;
+    background-color: #2f3542;
+    border-radius: 10px;
+    text-align: justify;
+    font-size: 2vw;
+    padding:3%;
+    margin: 1% 1% 1% 1%;
+    transition: 0.3s;
+}
+
+#p_indices:hover{
+    background-color: #7bed9f;
+    color: black;
+}
+
+.p_info:hover{
+    background-color: #ff6b6b;
+    color: white;
+}
+
+#p_desc{
+    color: #ccc;
+    font-size: 2vw;
+    width:60%;
+}
+
+.p-desc-weight-height{
+    color:#ccc;
+    font-size: 1.8vw;
+    font-family: Helvetica, Arial; 
+}
+
+#pokemon-fetch-button{
+    width: 100%;    
+    background-color: #2f3542;
+    border: 0px solid;
+    color: white;
+    padding: 2%;
+    border: 0px solid;
+    border-radius: 5px;    
+    transition: 0.3s;
+}
+
+#back-top-button{
+    margin-bottom: 2%;
+    display: none;
+    margin-top: 2%;
+    background-color: #ccc;
+    width: 100%;
+    border: 0px solid;
+    color: black;
+    padding: 2%;
+    border: 0px solid;
+    border-radius: 5px;    
+    transition: 0.3s;    
+}
+
+#back-top-button:hover{
+    background-color: #7bed9f;
+    color: black;
+}
+
+
+#clear-pokemon-fetch{
+    display: none;
+    width: 100%;    
+    background-color: #34495e;
+    border: 0px solid;    
+    color: white;
+    padding: 2%;
+    border: 0px solid;
+    border-radius: 5px;    
+    transition: 0.3s;
+}
+
+#pokemon-fetch-button:hover{
+    color: #333;
+    background-color: #7bed9f;
+}
+
+#clear-pokemon-fetch:hover{
+    color: black;
+    background-color: #ff6b6b;
+}
+
+#pokemon-name-input{   
+    width:96%;
+    padding: 1.5%;
+    border-radius: 10px;
+    text-align: center;
+}
+
+#user-stuff{
+    font-family: Helvetica, Arial;
+    font-size: 20px;
+}

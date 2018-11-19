@@ -1,0 +1,18 @@
+{
+ "manifest_version": 2,
+ "name": "The PokéInfo - PokéDex.",
+ "description": "The PokéInfo - PokéDex. Get detailed pokémon info through an easy-to-use an retro look-and-feel pokédex!",
+ "icons": {
+	   "16": "icon16.png",
+	   "48": "icon48.png",
+	   "128": "icon128.png"
+	},
+ "version": "0.0.0.1",
+ "author": "Brayam Núñez",
+"browser_action": {
+   "default_icon": "tab-icon.png",
+   "default_title": "The PokéInfo - PokéDex",
+   "permissions": ["activeTab"],
+   "default_popup": "popup.html"
+}
+}

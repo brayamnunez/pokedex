@@ -1,0 +1,53 @@
+<!DOCTYPE HTML>
+<html lang="en" style="min-width:600px;">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Security-Policy" content="default-src *; style-src 'self' http://* 'unsafe-inline'; script-src 'self' http://* 'unsafe-inline' 'unsafe-eval'" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The PokéInfo - PokéDex.</title>
+
+    <!-- Estilos CSS-->
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+
+    <!-- Slider Pluggin jQuery-->
+    <script src="js/jquery/jquery.js"></script>
+    <script src="js/jquery/jquery.min.js"></script>
+
+</head>
+
+<body>
+
+    <div id="container-logo">
+        <img src="img/pokedex64.png" alt="The Poke Dex - Fueled by PokeAPI.">
+        <h3 class="title-h3">The PokéInfo - PokéDex.</h3>        
+        <hr>
+    </div>
+
+    <div id="pokedex-container">
+        <form id="pokedex-form">
+            <img class="responsive-img-center" src="img/pokeball_resp.png" alt="pokeball"></img>
+            <h4 class="title-welcome">Gotta Catch Em' All!</h4>
+            <h4 class="title-welcome">Welcome, Ash!</h4>
+            <p style="display: none;" id="p_loading">Loading...</p><img style="display: none;" id="poke-gif" class="responsive-img-gif" src="img/pokeball_gif.gif" alt=""/></p>
+            <input autocapitalize="none" id="pokemon-name-input" name="pokemon-name-input" type="text" placeholder="Type pokémon name" />
+            <br><br>
+            <button id="pokemon-fetch-button" type="button">Search Pokémon</button>
+            <br><br>            
+        </form>
+        
+        <div id="pokemon-info">
+            <!-- Loading dynamically pokémon info from API-->            
+        </div>
+        <div id="back-top">
+            <button id="back-top-button" type="button">Search Others!</button>            
+            <button id="clear-pokemon-fetch" type="button">Clear Pokédex</button>
+        </div>
+    </div>
+</body>
+
+<!-- JS-->
+<script type="text/javascript" src=""></script>
+<script type="text/javascript" src="js/pokedex.js"></script>
+
+</html>
