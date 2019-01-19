@@ -13,6 +13,46 @@ label{
     padding: 3% 2.5% 3% 2.5%;
 }
 
+.poke_all_img{
+    background-color: #ccc;
+    border: 10% solid black;
+    border-radius: 20%;
+    display: flex;
+    transition: transform .2s; /* Animation */
+    width: 80%;
+    height: 30%;
+    cursor: pointer;
+}
+
+.poke_img_block{
+    display:block;
+    float: left;
+    width: 20%;
+    padding: 0% 2% 1% 3%;
+    border-radius: 10%;
+}
+
+#p_name{
+    font-family: Helvetica, Arial;
+    color: #333;
+    font-size: 2.0vw;
+    white-space: nowrap;
+    
+}
+
+#loadPI{    
+    overflow-y:scroll;    
+    height: 320px;
+    width: 100%;
+    overflow: scroll;
+}
+
+.poke_all_img:hover {
+    -ms-transform: scale(1.2); /* IE 9 */
+    -webkit-transform: scale(1.2); /* Safari 3-8 */
+    transform: scale(1.2); 
+}
+
 #pokedex-container-info{
     border-radius: 10px;
     background-color: #333;        
@@ -39,7 +79,7 @@ label{
 .title-welcome{
     font-family: Helvetica, Arial;
     color: white;
-    font-size: 3vw;
+    font-size: 2.5vw;
 }
 
 #p_loading{
@@ -143,18 +183,18 @@ label{
     transition: 0.3s;
 }
 
-#p_indices{
+#p_pokeinfo{
     color: #ccc;
     background-color: #2f3542;
     border-radius: 10px;
-    text-align: justify;
+    text-align: center;
     font-size: 2vw;
     padding:3%;
     margin: 1% 1% 1% 1%;
     transition: 0.3s;
 }
 
-#p_indices:hover{
+#p_pokeinfo:hover{
     background-color: #7bed9f;
     color: black;
 }
@@ -177,7 +217,7 @@ label{
 }
 
 #pokemon-fetch-button{
-    width: 100%;    
+    width: 31%;    
     background-color: #2f3542;
     border: 0px solid;
     color: white;
@@ -185,6 +225,7 @@ label{
     border: 0px solid;
     border-radius: 5px;    
     transition: 0.3s;
+    float: right;
 }
 
 #back-top-button{
@@ -230,9 +271,9 @@ label{
 }
 
 #pokemon-name-input{   
-    width:96%;
+    width:62%;
     padding: 1.5%;
-    border-radius: 10px;
+    border-radius: 5px;
     text-align: center;
 }
 

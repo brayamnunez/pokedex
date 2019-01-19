@@ -8,6 +8,11 @@ $(document).ready(function () {
     var clear_pokedex = $("#clear-pokemon-fetch");
     var pokemon_info = $("#pokemon-info");
     var search_other_pokemon = $("#back-top-button");
+    var divP_img = $("#loadPI");
+    var pokemon_title;
+    var pname;
+    var img_counter = 1;
+    var poke_container_obj;
 
     //Scroll up to pokedex top;
     search_other_pokemon.click(() => {
@@ -24,113 +29,223 @@ $(document).ready(function () {
         search_other_pokemon.hide();
         clear_pokedex.hide();
     });
-        
 
-    //When 'Search Pokémon is clicked, triggers the search;
-    var pokemon_search_button = pokemon_button.click (() => {
+    //Fetch All Pokémons;
+    function getPokemons() {
+        return fetch('https://pokeapi-215911.firebaseapp.com/api/v2/pokemon/?offset=0&limit=1000');
+    }
 
+    //Fetch Specific Pokémon
+    function getPokemon(pokemon_id) {
+        return fetch('https://pokeapi-215911.firebaseapp.com/api/v2/pokemon/' + pokemon_id);
+    }
+
+    //Fetch Description of the Pokémon
+    function getGameIndices(p_o_pname) {
+        return fetch("https://pokeapi-215911.firebaseapp.com/api/v2/pokemon-species/" + p_o_pname);
+    }
+
+    //Promise to call all Pokémons to show;
+    getPokemons()
+        .then(data => data.json())
+        .then(p_data => {
+            getAllPokemon(p_data);
+        });
+
+    //If clicks on a Pokémon img, will look for that Pokémon Info;
+    $(document).on("click", "img.poke_all_img", function (e) {
+        id_pokemon = parseInt(e.currentTarget.id);
+        id_pokemon += 1;
+        getPokemon(id_pokemon)
+            .then(data => data.json())            
+            .then(p_o_data => {
+                getOnePokemon(p_o_data);
+            })
+            .catch(() => {
+                alert("Error with PokéAPI. Couldn't fetch Pokémon info.");
+                clear_pokemon_input()
+            })
+    });
+
+    function getOnePokemon(r_pokemon_fetch) {
+        upperLetter = r_pokemon_fetch.name.toLowerCase().replace(/\b[a-z]/g, function (letter) {
+            return letter.toUpperCase();
+        });
+
+        var pokemon_fetch_desc = {
+            "async": true,
+            "crossDomain": true,
+            "url": "https://pokeapi-215911.firebaseapp.com/api/v2/pokemon-species/" + r_pokemon_fetch.name,
+            "method": "GET",
+            "headers": {},
+            beforeSend: function () {
+                $('#p_loading').fadeIn("slow");
+                $('#poke-gif').fadeIn("slow");
+                pokemon_name_selector.hide();
+                pokemon_button.hide();
+            }
+        }
+
+        $.ajax(pokemon_fetch_desc).done(function (response_pokemon) {
+            var array_lang = response_pokemon.flavor_text_entries;
+
+            //go through the elements of the lang description array and grab the description in english only;
+            for (i in array_lang) {
+                if (array_lang[i].language.name == "en") {
+                    var p_desc = response_pokemon.flavor_text_entries[i].flavor_text;
+                }
+            }
+
+            var pokemon_regions = [];
+            var pokemon_regions_array = response_pokemon.pokedex_numbers;
+
+            var game_indices = [];
+            var game_indices_array = r_pokemon_fetch.game_indices;
+            
+            //Go through the indices games and put each element into a new array to show it later;
+            for (o in game_indices_array) {
+                game_indices.push(" " + game_indices_array[o].version.name);
+            }
+
+            //Go through the regions pokemon may be encounter and put each element into a new array to show it later;
+            for (i in pokemon_regions_array) {
+                pokemon_regions.push(" " + pokemon_regions_array[i].pokedex.name);
+            }
+
+            p_o_height = r_pokemon_fetch.height / 10;
+
+            //array with "pokemon moves";
+            var p_o_moves = [];
+
+            //pushing all the moves to the array;
+            p_o_moves.push(
+                r_pokemon_fetch.moves[0].move.name,
+                r_pokemon_fetch.moves[1].move.name,
+                r_pokemon_fetch.moves[2].move.name,
+                r_pokemon_fetch.moves[3].move.name);
+
+            poke_container_obj = build_pokeinfo_cont(upperLetter,
+                r_pokemon_fetch.types[0].type.name,
+                p_desc,
+                r_pokemon_fetch.sprites.back_default,
+                r_pokemon_fetch.sprites.front_default,
+                r_pokemon_fetch.weight,
+                p_o_height,
+                game_indices,
+                pokemon_regions,
+                response_pokemon.generation.name,
+                response_pokemon.habitat.name,
+                p_o_moves)
+
+            var pokemonFetch = $("#pokemon-info").append(poke_container_obj);
+            pokemon_info.fadeIn("slow");
+            $('#p_loading').hide();
+            $('#poke-gif').hide();
+            $('body, html').animate({ scrollTop: $("#pokedex-container #pokedex-container-info").last().offset().top }, 1000);
+            search_other_pokemon.show();
+            clear_pokedex.show();
+            pokemon_name_selector.show();
+            pokemon_button.show();
+            clear_pokemon_input();
+        });
+    }
+
+    function getAllPokemon(response_pokemon_path) {
+        for (i = 0; i <= response_pokemon_path.results.length - 143; i++) {
+            img_path = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/";
+
+            pname = response_pokemon_path.results[i].name.toLowerCase().replace(/\b[a-z]/g, function (letter) {
+                return letter.toUpperCase();
+            });
+
+            p_pic = img_path + img_counter + ".png";
+
+            img_template = `
+                <div class='poke_img_block' id="div_layout ${i.toString()}">
+                    <h3 id="p_name">${pname}</h3>
+                    <img title='Click [${pname}] to see info.' src='${p_pic}' class='poke_all_img' id='${i.toString()}'></img>
+                </div>
+            `;
+            img_counter++;
+            divP_img.append(img_template);
+        }
+        //console.log("indice: " + i);
+    };
+
+    function clear_pokemon_input() {
+        pokemon_name_selector.val("");
+    }
+
+    function build_pokeinfo_cont(poke_name, poke_type, poke_desc, sprite_back, sprite_front,
+        poke_weight, poke_height, game_indice, pokemon_regions, generation, habitat, moves = []) {
+        var records = `
+            <div id="pokedex-container-info">
+                <h4 id="title-pokeinfo-pokemon">Pokémon Info.</h4>                        
+                    <div id="querys-name-type">
+                        <h2 id="pokemon-title">${poke_name}, ${poke_type}.</h2>                                
+                            <div id="desc_img">
+                                <p id="p_desc">${poke_desc}</p>                                    
+                            </div>
+                            <div id="pokemon-img">
+                                <img class="responsive-img" src="${sprite_back}"></img>
+                                <img class="responsive-img" src="${sprite_front}"></img>
+                            </div>
+                            <p class="p-desc-weight-height">Weight (pounds): ${poke_weight}</p>
+                            <p class="p-desc-weight-height">Height (meters): ${poke_height}</p>                            
+                            <h2 id="pokemon-title">Regions</h2>                            
+                            <p id="p_pokeinfo">${pokemon_regions}.</p>
+                            <h2 id="pokemon-title">Habitat</h2>
+                            <p id="p_pokeinfo">${habitat}.</p>
+                            <h2 id="pokemon-title">Generation</h2>
+                            <p id="p_pokeinfo">${generation}.</p>
+                            <h2 id="pokemon-title">Appearances</h2>
+                            <p id="p_pokeinfo">${game_indice}.</p>
+                    </div>                                                        
+                    <br>                
+                    <div id="querys-moves">
+                        <h2 class="title-pokeinfo">First 4 Moves</h2>
+                        <p class="p_info">${moves[0]}</p>                    
+                        <p class="p_info">${moves[1]}</p>
+                         <p class="p_info">${moves[2]}</p>
+                        <p class="p_info">${moves[3]}</p>
+                    </div>
+            </div><hr><hr><hr>`;
+        return records;
+    }
+
+    //When Search Pokémon is clicked, triggers the search;
+    function pokemon_search_button() {
         //grab the name of the pokemon ;
-        p_name_string = String(pokemon_name_selector.val());        
-        
+        p_name_string = String(pokemon_name_selector.val());
+
         if (p_name_string == '') {
             alert("No Pokémon was entered. Please enter a Pokémon name.");
         } else {
-            var pokemon_fetch_set = {
-                "async": true,
-                "crossDomain": true,
-                "url": "https://pokeapi-215911.firebaseapp.com/api/v2/pokemon/" + p_name_string.toLowerCase(),
-                "method": "GET",
-                "headers": {},
-                "dataType": "json"
-            }
 
-            $.ajax(pokemon_fetch_set).done(function (response_pokemon) {
-                
-                var pokemon_fetch_desc = {
-                    "async": true,
-                    "crossDomain": true,
-                    "url": "https://pokeapi-215911.firebaseapp.com/api/v2/pokemon-species/" + response_pokemon.name,
-                    "method": "GET",
-                    "headers": {},
-                    beforeSend: function(){                        
-                        $('#p_loading').fadeIn("slow");
-                        $('#poke-gif').fadeIn("slow");
-                        pokemon_name_selector.hide();
-                        pokemon_button.hide();
-                    }
-                }
+            getPokemon(p_name_string.toLowerCase())
+                .then(data => data.json())
+                .then(p_o_data => {
+                    getOnePokemon(p_o_data);
+                })
+                .catch(() => {
+                    alert("Error with PokéAPI. Couldn't fetch Pokémon info.")
+                    clear_pokemon_input()
+                })
+        }
+    }
 
-                $.ajax(pokemon_fetch_desc)    
-                .done(function (response_pokemon_desc) {
-                    
-                    //show the english description of the pokemon fetched;                
-                    var array_lang = response_pokemon_desc.flavor_text_entries;
-                    var game_indices_array = response_pokemon.game_indices;
-                    var game_indices = [];
-
-                    //go through the elements of the lang description array and grab the description in english only;
-                    for (i in array_lang) {
-                        if (array_lang[i].language.name == "en") {
-                            var p_desc = response_pokemon_desc.flavor_text_entries[i].flavor_text;
-                        }
-                    }
-
-                    //Go through the indices games and put each element into a new array to show it later;
-                    for (o in game_indices_array) {
-                        game_indices.push(" " + game_indices_array[o].version.name);
-                    }
-                    
-                    upperLetter = response_pokemon.name.toLowerCase().replace(/\b[a-z]/g, function(letter) {
-                        return letter.toUpperCase();
-                    });
-                    
-                    var records = `
-                    <div id="pokedex-container-info">
-                        <h4 id="title-pokeinfo-pokemon">Pokémon Info.</h4>                        
-                        <div id="querys-name-type">
-                                <h2 id="pokemon-title">${upperLetter}, ${response_pokemon.types[0].type.name}.</h2>                                
-                                <div id="desc_img">
-                                    <p id="p_desc">${p_desc}</p>                                    
-                                </div>
-                                <div id="pokemon-img">
-                                    <img class="responsive-img" src="${response_pokemon.sprites.back_default}"></img>
-                                    <img class="responsive-img" src="${response_pokemon.sprites.front_default}"></img>
-                                </div>
-                                <p class="p-desc-weight-height">Weight (pounds): ${response_pokemon.weight}</p>
-                                <p class="p-desc-weight-height">Height (meters): ${response_pokemon.height / 10}</p>
-                                <h2 id="pokemon-title">Appearances</h2>
-                                <p id="p_indices">${game_indices}.</p>                                
-                            </div>                                                        
-                        <br>                
-                        <div id="querys-moves">
-                            <h2 class="title-pokeinfo">Moves</h2>
-                            <p class="p_info">${response_pokemon.moves[0].move.name}</p>                    
-                            <p class="p_info">${response_pokemon.moves[1].move.name}</p>
-                            <p class="p_info">${response_pokemon.moves[2].move.name}</p>
-                            <p class="p_info">${response_pokemon.moves[3].move.name}</p>
-                        </div>
-                    </div><hr><hr><hr>`;
-
-                    //appends all the registries: pokemon into the div;
-                    var pokemonFetch = $("#pokemon-info").append(records);
-                    pokemon_info.fadeIn("slow");
-                    //clears the pokémon name;
-                    pokemon_name_selector.val('');
-                    $('#p_loading').hide();
-                    $('#poke-gif').hide();
-                    $('body, html').animate({ scrollTop: $("#pokedex-container #pokedex-container-info").last().offset().top }, 1000);
-                    search_other_pokemon.show();
-                    clear_pokedex.show();
-                    pokemon_name_selector.show();
-                    pokemon_button.show();
-
-                }).fail(() => {//if the ajax call fail looking for pokémon description;
-                    alert("No Description associated for that Pokémon.")
-                });
-
-            }).fail(() => {//if the ajax call fail looking for the pokémon itself;
-                alert("Please check your Pokémon Spelling, or maybe that Pokémon does not exist.");
-            });
+    //If enter is pressed when typing a Pokémon name, do the search;
+    $(document).keypress(function (e) {
+        if (e.which === 13) {
+            event.preventDefault();
+            pokemon_search_button();
         }
     });
+
+    //If the Pokémon search button is clicked, do the search;
+    $(pokemon_button).click(function (e) {
+        pokemon_search_button();
+    });
+
+
 });
